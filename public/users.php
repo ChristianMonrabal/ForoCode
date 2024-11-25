@@ -1,17 +1,8 @@
 <?php
 session_start();
-
-if (!isset($_SESSION['loggedin'])) {
-    header("Location: ./login.php");
-    exit();
-}
-
-$section = isset($_GET['section']) ? $_GET['section'] : 'signin';
-
 $isLoggedIn = isset($_SESSION['loggedin']) === true;
 $username = $isLoggedIn ? htmlspecialchars($_SESSION['username']) : null;
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,7 +11,7 @@ $username = $isLoggedIn ? htmlspecialchars($_SESSION['username']) : null;
     <title>ForoCode</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="../css/profile.css">
+    <link rel="stylesheet" href="../css/users.css">
 </head>
 <body id="body" class="light-mode">
     <nav class="navbar navbar-expand-lg navbar-light">
@@ -41,6 +32,7 @@ $username = $isLoggedIn ? htmlspecialchars($_SESSION['username']) : null;
                                 <?php echo $username; ?>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="profile.php">Ver perfil</a></li>
                             <li><a class="dropdown-item" href="../private/logout.php">Cerrar sesión</a></li>
                             </ul>
                         </li>
@@ -58,7 +50,7 @@ $username = $isLoggedIn ? htmlspecialchars($_SESSION['username']) : null;
             <div class="col-2 sidebar">
                 <button class="btn btn-sidebar w-100 mb-3" onclick="window.location.href='../index.php'">Inicio</button>
                 <button class="btn btn-sidebar w-100 mb-3" onclick="window.location.href='questions.php'">Preguntas</button>
-                <button class="btn btn-sidebar w-100 mb-3" onclick="window.location.href='users.php'">Usuarios</button>
+                <button class="btn btn-sidebar w-100 mb-3" id="selection" >Usuarios</button>
                 <button class="btn btn-sidebar w-100" onclick="window.location.href='chats.php'">Chats</button>
             </div>
             <div class="col-10">
@@ -68,3 +60,4 @@ $username = $isLoggedIn ? htmlspecialchars($_SESSION['username']) : null;
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
