@@ -28,7 +28,7 @@ $questions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <body id="body" class="light-mode">
 <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">ForoCode</a>
+        <a class="navbar-brand" href="../index.php">ForoCode</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>

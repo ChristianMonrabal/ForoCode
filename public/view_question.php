@@ -40,6 +40,30 @@ try {
     echo "Error al obtener la pregunta o respuestas: " . $e->getMessage();
     exit();
 }
+
+// Obtener el mensaje de error de la sesión
+$error_message = isset($_SESSION['error_message']) ? $_SESSION['error_message'] : '';
+unset($_SESSION['error_message']); // Limpiar el mensaje de error después de mostrarlo
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Validar que el contenido no esté vacío
+    if (empty($_POST['contenido'])) {
+        $error_message = "El contenido de la respuesta no puede estar vacío.";
+    } else {
+        // Procesar la respuesta
+        $pregunta_id = $_POST['pregunta_id'];
+        $contenido = $_POST['contenido'];
+
+        try {
+            $sql = "INSERT INTO respuestas (pregunta_id, usuario_id, contenido) VALUES (?, ?, ?)";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([$pregunta_id, $_SESSION['user_id'], $contenido]);
+            // Redirigir o mostrar un mensaje de éxito
+        } catch (PDOException $e) {
+            $error_message = "Error al enviar la respuesta: " . $e->getMessage();
+        }
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -54,7 +78,7 @@ try {
 <body id="body" class="light-mode">
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">ForoCode</a>
+            <a class="navbar-brand" href="../index.php">ForoCode</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -93,10 +117,14 @@ try {
         <form action="../private/submit_answer.php" method="POST">
             <input type="hidden" name="pregunta_id" value="<?php echo htmlspecialchars($pregunta['id']); ?>">
             <div class="mb-3">
-                <textarea class="form-control" name="contenido" placeholder="Escribe tu respuesta aquí..." maxlength="500" required></textarea>
+                <textarea class="form-control" name="contenido" placeholder="Escribe tu respuesta aquí..." maxlength="500"></textarea>
             </div>
             <button type="submit" class="btn btn-primary">Responder</button>
         </form>
+
+        <?php if (!empty($error_message)): ?>
+            <div class="alert alert-danger mt-3"><?php echo htmlspecialchars($error_message); ?></div>
+        <?php endif; ?>
 
         <h2 class="mt-4">Respuestas</h2>
         <?php if (empty($respuestas)): ?>
