@@ -13,7 +13,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $usuario_id = $_SESSION['usuario_id'];
 
     if (empty($contenido)) {
-        header("Location: ../public/view_question.php?id=" . $pregunta_id . "&error=empty_content");
+        $_SESSION['error_message'] = "El contenido de la respuesta no puede estar vacío.";
+        header("Location: ../public/view_question.php?id=" . $pregunta_id);
         exit();
     }
 
@@ -28,7 +29,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         header("Location: ../public/view_question.php?id=" . $pregunta_id);
         exit();
     } catch (PDOException $e) {
-        echo "Error al publicar la respuesta: " . htmlspecialchars($e->getMessage());
+        $_SESSION['error_message'] = "Error al publicar la respuesta: " . htmlspecialchars($e->getMessage());
+        header("Location: ../public/view_question.php?id=" . $pregunta_id);
+        exit();
     }
 }
 ?>

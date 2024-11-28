@@ -10,6 +10,46 @@ if (!$isLoggedIn) {
 }
 
 $username = htmlspecialchars($_SESSION['username']);
+$errores = [];
+
+// Obtener el ID del usuario desde la base de datos
+$stmt = $pdo->prepare("SELECT id FROM usuarios WHERE username = :username");
+$stmt->bindParam(':username', $username);
+$stmt->execute();
+$usuario_id = $stmt->fetchColumn(); // Obtener el ID del usuario
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $titulo = trim($_POST['titulo']);
+    $descripcion = trim($_POST['descripcion']);
+
+    if (empty($titulo)) {
+        $errores['titulo'] = "El título es obligatorio.";
+    }
+
+    if (empty($descripcion)) {
+        $errores['descripcion'] = "La descripción es obligatoria.";
+    }
+
+    if (empty($errores)) {
+        try {
+            $stmt = $pdo->prepare("INSERT INTO preguntas (usuario_id, titulo, descripcion, etiquetas) VALUES (:usuario_id, :titulo, :descripcion, :etiquetas)");
+            $etiquetas = '';
+            $stmt->bindParam(':usuario_id', $usuario_id);
+            $stmt->bindParam(':titulo', $titulo);
+            $stmt->bindParam(':descripcion', $descripcion);
+            $stmt->bindParam(':etiquetas', $etiquetas);
+
+            if ($stmt->execute()) {
+                header("Location: ../index.php");
+                exit();
+            } else {
+                $errores['general'] = "Error al publicar la pregunta. Inténtalo de nuevo.";
+            }
+        } catch (PDOException $e) {
+            $errores['general'] = "Error en la base de datos: " . $e->getMessage();
+        }
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -25,7 +65,7 @@ $username = htmlspecialchars($_SESSION['username']);
 <body id="body" class="light-mode">
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">ForoCode</a>
+            <a class="navbar-brand" href="../index.php">ForoCode</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -54,10 +94,19 @@ $username = htmlspecialchars($_SESSION['username']);
             </div>
         </div>
     </nav>
-    <form class="question-form" action="../private/submit_question.php" method="POST">
+    <form class="question-form" action="" method="POST">
         <h1 class="form-title">Publicar una nueva pregunta</h1>
-        <input class="form-input" type="text" name="titulo" placeholder="Título de la pregunta">
-        <textarea class="form-textarea" name="descripcion" placeholder="Descripción de la pregunta"></textarea>
+        <?php if (isset($errores['general'])): ?>
+            <div class="alert alert-danger"><?php echo $errores['general']; ?></div>
+        <?php endif; ?>
+        <input class="form-input" type="text" name="titulo" placeholder="Título de la pregunta" value="<?php echo isset($titulo) ? htmlspecialchars($titulo) : ''; ?>">
+        <?php if (isset($errores['titulo'])): ?>
+            <div class="alert alert-danger"><?php echo $errores['titulo']; ?></div>
+        <?php endif; ?>
+        <textarea class="form-textarea" name="descripcion" placeholder="Descripción de la pregunta"><?php echo isset($descripcion) ? htmlspecialchars($descripcion) : ''; ?></textarea>
+        <?php if (isset($errores['descripcion'])): ?>
+            <div class="alert alert-danger"><?php echo $errores['descripcion']; ?></div>
+        <?php endif; ?>
         <button class="form-submit" type="submit">Publicar</button>
     </form>
 
