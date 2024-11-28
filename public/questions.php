@@ -1,7 +1,34 @@
 <?php
 session_start();
-$isLoggedIn = isset($_SESSION['loggedin']) === true;
+include_once "../db/conexion.php";
+
+$isLoggedIn = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
 $username = $isLoggedIn ? htmlspecialchars($_SESSION['username']) : null;
+
+// Obtener el término de búsqueda
+$searchTerm = isset($_GET['search']) ? trim($_GET['search']) : '';
+
+$query = "SELECT p.id, p.titulo, p.descripcion, p.fecha_publicacion, u.username 
+        FROM preguntas p
+        JOIN usuarios u ON p.usuario_id = u.id";
+
+// Si hay un término de búsqueda, agregar filtro a la consulta
+if (!empty($searchTerm)) {
+    $query .= " WHERE p.titulo LIKE :search OR p.descripcion LIKE :search";
+}
+
+$query .= " ORDER BY p.fecha_publicacion DESC";
+
+$stmt = $pdo->prepare($query);
+
+// Vincular parámetro de búsqueda si es necesario
+if (!empty($searchTerm)) {
+    $stmt->bindValue(':search', "%$searchTerm%", PDO::PARAM_STR);
+}
+
+$stmt->execute();
+
+$questions = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -21,8 +48,8 @@ $username = $isLoggedIn ? htmlspecialchars($_SESSION['username']) : null;
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarContent">
-                <form class="d-flex me-auto" role="search">
-                    <input class="form-control me-2 search-bar" type="search" placeholder="Buscar en ForoCode" aria-label="Search">
+                <form class="d-flex me-auto" role="search" method="GET" action="questions.php">
+                    <input class="form-control me-2 search-bar" type="search" placeholder="Buscar en ForoCode" aria-label="Search" name="search" value="<?php echo htmlspecialchars($searchTerm); ?>">
                     <button class="btn btn-outline-dark" type="submit">Buscar</button>
                 </form>
                 <ul class="navbar-nav ms-auto">
@@ -32,8 +59,8 @@ $username = $isLoggedIn ? htmlspecialchars($_SESSION['username']) : null;
                                 <?php echo $username; ?>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            <li><a class="dropdown-item" href="profile.php">Ver perfil</a></li>
-                            <li><a class="dropdown-item" href="../private/logout.php">Cerrar sesión</a></li>
+                                <li><a class="dropdown-item" href="profile.php">Ver perfil</a></li>
+                                <li><a class="dropdown-item" href="../private/logout.php">Cerrar sesión</a></li>
                             </ul>
                         </li>
                     <?php else: ?>
@@ -53,11 +80,34 @@ $username = $isLoggedIn ? htmlspecialchars($_SESSION['username']) : null;
                 <button class="btn btn-sidebar w-100 mb-3" onclick="window.location.href='users.php'">Usuarios</button>
                 <button class="btn btn-sidebar w-100" onclick="window.location.href='chats.php'">Chats</button>
             </div>
-            <div class="col-10">
+            <div class="col-lg-7 col-md-6 col-12 content-right">
+                <h3>
+                    <?php
+                    if (!empty($searchTerm)) {
+                        echo "Resultados para: " . htmlspecialchars($searchTerm);
+                    } else {
+                        echo "Todas las preguntas";
+                    }
+                    ?>
+                </h3>
+                <?php
+                if ($questions) {
+                    foreach ($questions as $row) {
+                        echo '<div class="question-item">';
+                        echo '<div class="question-header">';
+                        echo '<h5><a href="./view_question.php?id=' . $row['id'] . '">' . htmlspecialchars($row['titulo']) . '</a></h5>';
+                        echo '<p><strong>' . htmlspecialchars($row['username']) . '</strong> - <small>' . date("d M Y", strtotime($row['fecha_publicacion'])) . '</small></p>';
+                        echo '</div>';
+                        echo '<p class="question-description">' . nl2br(htmlspecialchars($row['descripcion'])) . '</p>';
+                        echo '</div>';
+                    }
+                } else {
+                    echo '<p>No se encontraron preguntas que coincidan con tu búsqueda.</p>';
+                }
+                ?>
             </div>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-

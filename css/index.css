@@ -1,76 +1,165 @@
-.navbar {
-    background-color: #1fabca;
+    .navbar {
+        background-color: #1fabca;
+    }
+
+    .navbar-brand {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: white !important;
+    }
+
+    .navbar .navbar-nav .nav-link {
+        color: white;
+    }
+
+    .navbar .navbar-nav .nav-link:hover {
+        color: #000000;
+    }
+
+    .navbar .btn-login {
+        border-radius: 50px;
+        padding: 8px 20px;
+        border: 1px solid white;
+        background-color: transparent;
+        color: white;
+        text-decoration: none;
+    }
+
+    .navbar .btn-login:hover {
+        background-color: transparent;
+        color: white;
+        border-color: white;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .navbar .dropdown-menu {
+        background-color: #1fabca;
+        border: none;
+    }
+
+    .navbar .dropdown-menu .dropdown-item {
+        color: white;
+    }
+
+    .navbar .dropdown-menu .dropdown-item:hover {
+        background-color: white;
+        color: #1fabca;
+    }
+
+    form.d-flex {
+        width: 100%;
+        max-width: 600px;
+    }
+
+    .search-bar {
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .navbar-dark {
+        background-color: #1fabca !important;
+    }
+
+    .btn-outline-dark {
+        color: white !important;
+        border-color: white !important;
+    }
+
+    .btn-outline-dark:hover {
+        background-color: transparent !important;
+        color: white !important;
+        border-color: white !important;
+    }
+
+    .sidebar {
+        border: 2px solid #1fabca;
+        border-radius: 15px;
+        padding: 15px;
+        height: 80vh;
+        margin-top: 2%;
+        margin-left: 2%;
+        display: flex;
+        flex-direction: column;
+        align-items: center; 
+        justify-content: center; 
+    }
+
+    .btn-sidebar {
+        color: #000000;
+        border: none;
+        border-radius: 10px;
+        padding: 10px 20px;
+        margin-bottom: 10px;
+        width: 80%;
+        text-align: center;
+    }
+
+    .btn-sidebar:hover {
+        border: 2px solid #1fabca;
+    }
+
+    #selection {
+        background-color: #1fabca;
+        color: white;
+    }
+
+/* Estilos del contenedor de preguntas */
+.content-right {
+    border: 2px solid #1fabca;
+    border-radius: 15px;
+    padding: 15px;
+    height: 80vh;
+    margin-top: 2%;
+    background-color: #ffffff;
+    margin-left: 15px;
+    width: 80%;
+    overflow-y: auto;
+    max-height: 600px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra para darle profundidad */
 }
 
-.navbar-brand {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: white !important;
+.question-item {
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra para separar las preguntas */
+    transition: all 0.3s ease;
 }
 
-.navbar .navbar-nav .nav-link {
-    color: white;
+.question-item:hover {
+    transform: translateY(-5px); /* Efecto hover */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
 }
 
-.navbar .navbar-nav .nav-link:hover {
-    color: #000000;
+.question-header h5 {
+    font-size: 1.25rem;
+    color: black;
+    margin-bottom: 10px;
 }
 
-.navbar .btn-login {
-    border-radius: 50px;
-    padding: 8px 20px;
-    border: 1px solid white;
-    background-color: transparent;
-    color: white;
+.question-header p {
+    color: #1fabca;
+    font-size: 0.9rem;
+}
+
+.question-description {
+    font-size: 1rem;
+    color: black;
+    margin-bottom: 10px;
+}
+
+.question-item .btn-link {
+    color: #1fabca;
     text-decoration: none;
 }
 
-.navbar .btn-login:hover {
-    background-color: transparent;
-    color: white;
-    border-color: white;
-    transition: all 0.3s ease-in-out;
+.question-item .btn-link:hover {
+    text-decoration: underline;
+    color: #005c6e;
 }
 
-.navbar .dropdown-menu {
-    background-color: #1fabca;
-    border: none;
-}
-
-.navbar .dropdown-menu .dropdown-item {
-    color: white;
-}
-
-.navbar .dropdown-menu .dropdown-item:hover {
-    background-color: white;
-    color: #1fabca;
-}
-
-form.d-flex {
-    width: 100%;
-    max-width: 600px;
-}
-
-.search-bar {
-    width: 100%;
-    max-width: 500px;
-}
-
-.navbar-dark {
-    background-color: #1fabca !important;
-}
-
-.btn-outline-dark {
-    color: white !important;
-    border-color: white !important;
-}
-
-.btn-outline-dark:hover {
-    background-color: transparent !important;
-    color: white !important;
-    border-color: white !important;
-}
-
+/* Mejorar la apariencia del sidebar */
 .sidebar {
     border: 2px solid #1fabca;
     border-radius: 15px;
@@ -80,25 +169,49 @@ form.d-flex {
     margin-left: 2%;
     display: flex;
     flex-direction: column;
-    align-items: center; 
-    justify-content: center; 
+    align-items: center;
+    justify-content: center;
+    background-color: #f8f9fa; /* Fondo más suave */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .btn-sidebar {
-    color: #000000;
+    color: #000;
     border: none;
     border-radius: 10px;
     padding: 10px 20px;
     margin-bottom: 10px;
     width: 80%;
     text-align: center;
+    background-color: #ffffff;
+    transition: all 0.3s ease;
 }
 
 .btn-sidebar:hover {
     border: 2px solid #1fabca;
+    background-color: #e1f7f3;
 }
 
-#selection {
-    background-color: #1fabca;
-    color: white;
+/* Estilos del título de preguntas */
+.content-right h3 {
+    font-size: 1.75rem;
+    color: black;
+    margin-bottom: 20px;
 }
+
+/* Estilo de la barra de desplazamiento cuando es necesario */
+.content-right::-webkit-scrollbar {
+    width: 8px;
+}
+
+.content-right::-webkit-scrollbar-thumb {
+    background-color: #1fabca;
+    border-radius: 10px;
+}
+
+.content-right::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+}
+
+    
+    

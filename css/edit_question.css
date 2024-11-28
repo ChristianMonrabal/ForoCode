@@ -1,0 +1,158 @@
+.navbar {
+    background-color: #1fabca;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white !important;
+}
+
+.navbar .navbar-nav .nav-link {
+    color: white;
+}
+
+.navbar .navbar-nav .nav-link:hover {
+    color: #000000;
+}
+
+.navbar .btn-login {
+    border-radius: 50px;
+    padding: 8px 20px;
+    border: 1px solid white;
+    background-color: transparent;
+    color: white;
+    text-decoration: none;
+}
+
+.navbar .btn-login:hover {
+    background-color: transparent;
+    color: white;
+    border-color: white;
+    transition: all 0.3s ease-in-out;
+}
+
+.navbar .dropdown-menu {
+    background-color: #1fabca;
+    border: none;
+}
+
+.navbar .dropdown-menu .dropdown-item {
+    color: white;
+}
+
+.navbar .dropdown-menu .dropdown-item:hover {
+    background-color: white;
+    color: #1fabca;
+}
+
+form.d-flex {
+    width: 100%;
+    max-width: 600px;
+}
+
+.search-bar {
+    width: 100%;
+    max-width: 500px;
+}
+
+.navbar-dark {
+    background-color: #1fabca !important;
+}
+
+.btn-outline-dark {
+    color: white !important;
+    border-color: white !important;
+}
+
+.btn-outline-dark:hover {
+    background-color: transparent !important;
+    color: white !important;
+    border-color: white !important;
+}
+
+.sidebar {
+    border: 2px solid #1fabca;
+    border-radius: 15px;
+    padding: 15px;
+    height: 80vh;
+    margin-top: 2%;
+    margin-left: 2%;
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    justify-content: center; 
+}
+
+.btn-sidebar {
+    color: #000000;
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    margin-bottom: 10px;
+    width: 80%;
+    text-align: center;
+}
+
+.btn-sidebar:hover {
+    border: 2px solid #1fabca;
+}
+
+#selection {
+    background-color: #1fabca;
+    color: white;
+}
+
+body {
+    background-color: #f9f9f9;
+}
+
+.navbar {
+    background-color: #1fabca;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white !important;
+}
+
+.navbar .btn-outline-dark {
+    color: white !important;
+    border-color: white !important;
+}
+
+.navbar .btn-outline-dark:hover {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+}
+
+.form-container {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #1fabca;
+}
+
+.btn-primary {
+    background-color: #1fabca;
+    border-color: #1fabca;
+}
+
+.btn-primary:hover {
+    background-color: #138fa1;
+    border-color: #138fa1;
+}
+
+.form-label {
+    font-weight: bold;
+    color: #333;
+}

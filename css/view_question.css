@@ -1,0 +1,123 @@
+.navbar {
+    background-color: #1fabca;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white !important;
+}
+
+.navbar .navbar-nav .nav-link {
+    color: white;
+}
+
+.navbar .navbar-nav .nav-link:hover {
+    color: #000000;
+}
+
+.navbar .btn-login {
+    border-radius: 50px;
+    padding: 8px 20px;
+    border: 1px solid white;
+    background-color: transparent;
+    color: white;
+    text-decoration: none;
+}
+
+.navbar .btn-login:hover {
+    background-color: transparent;
+    color: white;
+    border-color: white;
+    transition: all 0.3s ease-in-out;
+}
+
+.navbar .dropdown-menu {
+    background-color: #1fabca;
+    border: none;
+}
+
+.navbar .dropdown-menu .dropdown-item {
+    color: white;
+}
+
+.navbar .dropdown-menu .dropdown-item:hover {
+    background-color: white;
+    color: #1fabca;
+}
+
+form.d-flex {
+    width: 100%;
+    max-width: 600px;
+}
+
+.search-bar {
+    width: 100%;
+    max-width: 500px;
+}
+
+.navbar-dark {
+    background-color: #1fabca !important;
+}
+
+.btn-outline-dark {
+    color: white !important;
+    border-color: white !important;
+}
+
+.btn-outline-dark:hover {
+    background-color: transparent !important;
+    color: white !important;
+    border-color: white !important;
+}
+
+
+/* Estilos para la página de ver pregunta */
+.custom-container {
+    max-width: 800px;
+}
+
+.question-details {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.question-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.question-description {
+    font-size: 1rem;
+    margin-top: 10px;
+    color: #555;
+}
+
+.list-group-item {
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+textarea.form-control {
+    border-radius: 8px;
+    padding: 12px;
+    resize: none;
+}
+
+.btn-primary {
+    background-color: #1fabca;
+    border-color: #1fabca;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #1a98a0;
+    border-color: #1a98a0;
+}
+
+.mb-3 {
+    margin-bottom: 1.5rem;
+}

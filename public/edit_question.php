@@ -1,30 +1,35 @@
 <?php
 session_start();
+require '../db/conexion.php';
 
 if (!isset($_SESSION['loggedin'])) {
     header("Location: ./login.php");
     exit();
 }
 
-include_once "../db/conexion.php";
-
-$section = isset($_GET['section']) ? $_GET['section'] : 'signin';
-
 $isLoggedIn = isset($_SESSION['loggedin']) === true;
 $username = $isLoggedIn ? htmlspecialchars($_SESSION['username']) : null;
 
 $usuario_id = $_SESSION['usuario_id'];
 
+$pregunta_id = $_GET['id'];
+$usuario_id = $_SESSION['usuario_id'];
+
 try {
-    $sql = "SELECT * FROM preguntas WHERE usuario_id = ?";
+    $sql = "SELECT * FROM preguntas WHERE id = ? AND usuario_id = ?";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$usuario_id]);
-    $preguntas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt->execute([$pregunta_id, $usuario_id]);
+    $pregunta = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$pregunta) {
+        echo "Pregunta no encontrada o no tienes permiso para editarla.";
+        exit();
+    }
 } catch (PDOException $e) {
-    echo "Error al obtener las preguntas: " . $e->getMessage();
+    echo "Error al obtener la pregunta: " . $e->getMessage();
+    exit();
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,7 +38,7 @@ try {
     <title>ForoCode</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="../css/profile.css">
+    <link rel="stylesheet" href="../css/edit_question.css">
 </head>
 <body id="body" class="light-mode">
     <nav class="navbar navbar-expand-lg navbar-light">
@@ -66,28 +71,32 @@ try {
             </div>
         </div>
     </nav>
-    <div class="container-fluid">
-    <div class="row">
-        <div class="col-lg-2 col-md-3 col-12 sidebar">
-            <button class="btn btn-sidebar w-100 mb-3"  onclick="window.location.href='../index.php'">Inicio</button>
-            <button class="btn btn-sidebar w-100 mb-3" onclick="window.location.href='./questions.php'">Preguntas</button>
-            <button class="btn btn-sidebar w-100 mb-3" onclick="window.location.href='./users.php'">Usuarios</button>
-            <button class="btn btn-sidebar w-100" onclick="window.location.href='./chats.php'">Chats</button>
-        </div>
-        <div class="col-lg-7 col-md-6 col-12 content-right">
-            <h1>Perfil de Usuario</h1>
-            <h2>Mis Preguntas</h2>
-            <ul>
-                <?php foreach ($preguntas as $pregunta): ?>
-                    <li>
-                        <h3><?php echo htmlspecialchars($pregunta['titulo']); ?></h3>
-                        <p><?php echo htmlspecialchars($pregunta['descripcion']); ?></p>
-                        <a href="../public/edit_question.php?id=<?php echo $pregunta['id']; ?>" class="btn btn-success">Editar</a>
-                        <a href="../private/delete_question.php?id=<?php echo $pregunta['id']; ?>" class="btn btn-danger">Eliminar</a>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
-        </div>
+    <div class="container mt-4">
+        <div class="form-container">
+            <h1 class="text-center mb-4">Editar Pregunta</h1>
+            <form action="../private/update_question.php" method="POST">
+                <input type="hidden" name="id" value="<?php echo $pregunta['id']; ?>">
+                <div class="mb-3">
+                    <label for="titulo" class="form-label">Título</label>
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        id="titulo" 
+                        name="titulo" 
+                        value="<?php echo htmlspecialchars($pregunta['titulo'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" 
+                        required>
+                </div>
+                <div class="mb-3">
+                    <label for="descripcion" class="form-label">Descripción</label>
+                    <textarea 
+                        class="form-control" 
+                        id="descripcion" 
+                        name="descripcion" 
+                        rows="5" 
+                        required><?php echo htmlspecialchars($pregunta['descripcion'] ?? '', ENT_QUOTES, 'UTF-8'); ?></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Actualizar</button>
+            </form>
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

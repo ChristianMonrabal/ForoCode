@@ -1,39 +1,26 @@
 <?php
 session_start();
-
-if (!isset($_SESSION['loggedin'])) {
-    header("Location: ./login.php");
-    exit();
-}
-
 include_once "../db/conexion.php";
 
-$section = isset($_GET['section']) ? $_GET['section'] : 'signin';
+$isLoggedIn = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
 
-$isLoggedIn = isset($_SESSION['loggedin']) === true;
-$username = $isLoggedIn ? htmlspecialchars($_SESSION['username']) : null;
-
-$usuario_id = $_SESSION['usuario_id'];
-
-try {
-    $sql = "SELECT * FROM preguntas WHERE usuario_id = ?";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([$usuario_id]);
-    $preguntas = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
-    echo "Error al obtener las preguntas: " . $e->getMessage();
+if (!$isLoggedIn) {
+    header("Location: ../public/login.php");
+    exit(); 
 }
+
+$username = htmlspecialchars($_SESSION['username']);
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ForoCode</title>
+    <title>Crear Pregunta</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <link rel="stylesheet" href="../css/profile.css">
+    <link rel="stylesheet" href="../css/create_question.css">
 </head>
 <body id="body" class="light-mode">
     <nav class="navbar navbar-expand-lg navbar-light">
@@ -54,6 +41,7 @@ try {
                                 <?php echo $username; ?>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="profile.php">Ver perfil</a></li>
                             <li><a class="dropdown-item" href="../private/logout.php">Cerrar sesión</a></li>
                             </ul>
                         </li>
@@ -66,30 +54,13 @@ try {
             </div>
         </div>
     </nav>
-    <div class="container-fluid">
-    <div class="row">
-        <div class="col-lg-2 col-md-3 col-12 sidebar">
-            <button class="btn btn-sidebar w-100 mb-3"  onclick="window.location.href='../index.php'">Inicio</button>
-            <button class="btn btn-sidebar w-100 mb-3" onclick="window.location.href='./questions.php'">Preguntas</button>
-            <button class="btn btn-sidebar w-100 mb-3" onclick="window.location.href='./users.php'">Usuarios</button>
-            <button class="btn btn-sidebar w-100" onclick="window.location.href='./chats.php'">Chats</button>
-        </div>
-        <div class="col-lg-7 col-md-6 col-12 content-right">
-            <h1>Perfil de Usuario</h1>
-            <h2>Mis Preguntas</h2>
-            <ul>
-                <?php foreach ($preguntas as $pregunta): ?>
-                    <li>
-                        <h3><?php echo htmlspecialchars($pregunta['titulo']); ?></h3>
-                        <p><?php echo htmlspecialchars($pregunta['descripcion']); ?></p>
-                        <a href="../public/edit_question.php?id=<?php echo $pregunta['id']; ?>" class="btn btn-success">Editar</a>
-                        <a href="../private/delete_question.php?id=<?php echo $pregunta['id']; ?>" class="btn btn-danger">Eliminar</a>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
-        </div>
-        </div>
-    </div>
+    <form class="question-form" action="../private/submit_question.php" method="POST">
+        <h1 class="form-title">Publicar una nueva pregunta</h1>
+        <input class="form-input" type="text" name="titulo" placeholder="Título de la pregunta">
+        <textarea class="form-textarea" name="descripcion" placeholder="Descripción de la pregunta"></textarea>
+        <button class="form-submit" type="submit">Publicar</button>
+    </form>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html>
+</html> 
