@@ -9,14 +9,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $usuario_id = $_SESSION['usuario_id'];
 
     try {
-        $sql = "UPDATE preguntas SET titulo = ?, descripcion = ? WHERE id = ? AND usuario_id = ?";
+        $sql = "UPDATE preguntas SET titulo = :titulo, descripcion = :descripcion WHERE id = :id AND usuario_id = :usuario_id";
         $stmt = $pdo->prepare($sql);
-        $stmt->execute([$titulo, $descripcion,$pregunta_id, $usuario_id]);
+        $stmt->bindParam(':titulo', $titulo, PDO::PARAM_STR);
+        $stmt->bindParam(':descripcion', $descripcion, PDO::PARAM_STR);
+        $stmt->bindParam(':id', $pregunta_id, PDO::PARAM_INT);
+        $stmt->bindParam(':usuario_id', $usuario_id, PDO::PARAM_INT);
+        $stmt->execute();
 
         header("Location: ../public/profile.php");
         exit();
     } catch (PDOException $e) {
-        echo "Error al actualizar la pregunta: " . $e->getMessage();
+        echo "Error al actualizar la pregunta: " . htmlspecialchars($e->getMessage());
     }
 }
-?> 
+?>

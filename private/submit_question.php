@@ -8,14 +8,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $usuario_id = $_SESSION['usuario_id'];
 
     try {
-        $sql = "INSERT INTO preguntas (usuario_id, titulo, descripcion) VALUES (?, ?, ?)";
+        $sql = "INSERT INTO preguntas (usuario_id, titulo, descripcion) VALUES (:usuario_id, :titulo, :descripcion)";
         $stmt = $pdo->prepare($sql);
-        $stmt->execute([$usuario_id, $titulo, $descripcion]);
+        $stmt->bindParam(':usuario_id', $usuario_id, PDO::PARAM_INT);
+        $stmt->bindParam(':titulo', $titulo, PDO::PARAM_STR);
+        $stmt->bindParam(':descripcion', $descripcion, PDO::PARAM_STR);
+        $stmt->execute();
 
         header("Location: ../index.php");
         exit();
     } catch (PDOException $e) {
-        echo "Error al publicar la pregunta: " . $e->getMessage();
+        echo "Error al publicar la pregunta: " . htmlspecialchars($e->getMessage());
     }
 }
-?> 
+?>

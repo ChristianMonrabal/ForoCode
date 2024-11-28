@@ -32,11 +32,6 @@ $questions = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarContent">
-            <form class="d-flex me-auto" role="search">
-                <input class="form-control me-2 search-bar" type="search" placeholder="Buscar en ForoCode" aria-label="Search">
-                <button class="btn btn-outline-dark" type="submit">Buscar</button>
-            </form>
             <ul class="navbar-nav ms-auto">
                 <?php if ($isLoggedIn): ?>
                     <li class="nav-item">

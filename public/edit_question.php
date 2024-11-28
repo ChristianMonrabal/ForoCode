@@ -64,7 +64,7 @@ try {
                         </li>
                     <?php else: ?>
                         <li class="nav-item">
-                            <a class="btn btn-login" href="./public/login.php">Iniciar sesión</a>
+                            <a class="btn btn-login" href="./login.php">Iniciar sesión</a>
                         </li>
                     <?php endif; ?>
                 </ul>
