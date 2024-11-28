@@ -5,14 +5,12 @@ include_once "../db/conexion.php";
 $isLoggedIn = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
 $username = $isLoggedIn ? htmlspecialchars($_SESSION['username']) : null;
 
-// Obtener el término de búsqueda
 $searchTerm = isset($_GET['search']) ? trim($_GET['search']) : '';
 
 $query = "SELECT p.id, p.titulo, p.descripcion, p.fecha_publicacion, u.username 
         FROM preguntas p
         JOIN usuarios u ON p.usuario_id = u.id";
 
-// Si hay un término de búsqueda, agregar filtro a la consulta
 if (!empty($searchTerm)) {
     $query .= " WHERE p.titulo LIKE :search OR p.descripcion LIKE :search";
 }
@@ -21,7 +19,6 @@ $query .= " ORDER BY p.fecha_publicacion DESC";
 
 $stmt = $pdo->prepare($query);
 
-// Vincular parámetro de búsqueda si es necesario
 if (!empty($searchTerm)) {
     $stmt->bindValue(':search', "%$searchTerm%", PDO::PARAM_STR);
 }

@@ -41,16 +41,13 @@ try {
     exit();
 }
 
-// Obtener el mensaje de error de la sesión
 $error_message = isset($_SESSION['error_message']) ? $_SESSION['error_message'] : '';
-unset($_SESSION['error_message']); // Limpiar el mensaje de error después de mostrarlo
+unset($_SESSION['error_message']);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Validar que el contenido no esté vacío
     if (empty($_POST['contenido'])) {
         $error_message = "El contenido de la respuesta no puede estar vacío.";
     } else {
-        // Procesar la respuesta
         $pregunta_id = $_POST['pregunta_id'];
         $contenido = $_POST['contenido'];
 
@@ -58,7 +55,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $sql = "INSERT INTO respuestas (pregunta_id, usuario_id, contenido) VALUES (?, ?, ?)";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([$pregunta_id, $_SESSION['user_id'], $contenido]);
-            // Redirigir o mostrar un mensaje de éxito
         } catch (PDOException $e) {
             $error_message = "Error al enviar la respuesta: " . $e->getMessage();
         }

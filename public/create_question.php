@@ -12,11 +12,10 @@ if (!$isLoggedIn) {
 $username = htmlspecialchars($_SESSION['username']);
 $errores = [];
 
-// Obtener el ID del usuario desde la base de datos
 $stmt = $pdo->prepare("SELECT id FROM usuarios WHERE username = :username");
 $stmt->bindParam(':username', $username);
 $stmt->execute();
-$usuario_id = $stmt->fetchColumn(); // Obtener el ID del usuario
+$usuario_id = $stmt->fetchColumn(); 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $titulo = trim($_POST['titulo']);

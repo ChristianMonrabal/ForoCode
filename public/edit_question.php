@@ -11,9 +11,11 @@ $isLoggedIn = isset($_SESSION['loggedin']) === true;
 $username = $isLoggedIn ? htmlspecialchars($_SESSION['username']) : null;
 
 $usuario_id = $_SESSION['usuario_id'];
-
 $pregunta_id = $_GET['id'];
-$usuario_id = $_SESSION['usuario_id'];
+$error_message_titulo = ""; 
+$error_message_descripcion = ""; 
+$titulo = ""; 
+$descripcion = ""; 
 
 try {
     $sql = "SELECT * FROM preguntas WHERE id = ? AND usuario_id = ?";
@@ -25,11 +27,39 @@ try {
         echo "Pregunta no encontrada o no tienes permiso para editarla.";
         exit();
     }
+
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        $titulo = trim($_POST['titulo']);
+        $descripcion = trim($_POST['descripcion']);
+
+        if (empty($titulo)) {
+            $error_message_titulo = "El título no puede estar vacío.";
+        }
+        if (empty($descripcion)) {
+            $error_message_descripcion = "La descripción no puede estar vacía.";
+        }
+
+        if (empty($error_message_titulo) && empty($error_message_descripcion)) {
+            try {
+                $sql = "UPDATE preguntas SET titulo = ?, descripcion = ? WHERE id = ?";
+                $stmt = $pdo->prepare($sql);
+                $stmt->execute([$titulo, $descripcion, $pregunta_id]);
+                header("Location: ./view_question.php?id=" . $pregunta_id);
+                exit();
+            } catch (PDOException $e) {
+                $error_message_descripcion = "Error al actualizar la pregunta: " . $e->getMessage();
+            }
+        }
+    } else {
+        $titulo = $pregunta['titulo'];
+        $descripcion = $pregunta['descripcion'];
+    }
 } catch (PDOException $e) {
     echo "Error al obtener la pregunta: " . $e->getMessage();
     exit();
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -74,26 +104,21 @@ try {
     <div class="container mt-4">
         <div class="form-container">
             <h1 class="text-center mb-4">Editar Pregunta</h1>
-            <form action="../private/update_question.php" method="POST">
+            <form action="./edit_question.php?id=<?php echo $pregunta_id; ?>" method="POST">
                 <input type="hidden" name="id" value="<?php echo $pregunta['id']; ?>">
                 <div class="mb-3">
                     <label for="titulo" class="form-label">Título</label>
-                    <input 
-                        type="text" 
-                        class="form-control" 
-                        id="titulo" 
-                        name="titulo" 
-                        value="<?php echo htmlspecialchars($pregunta['titulo'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" 
-                        required>
+                    <input type="text" class="form-control" id="titulo" name="titulo" value="<?php echo htmlspecialchars($titulo, ENT_QUOTES, 'UTF-8'); ?>">
+                    <?php if (!empty($error_message_titulo)): ?>
+                        <div class="alert alert-danger mt-1"><?php echo htmlspecialchars($error_message_titulo); ?></div>
+                    <?php endif; ?>
                 </div>
                 <div class="mb-3">
                     <label for="descripcion" class="form-label">Descripción</label>
-                    <textarea 
-                        class="form-control" 
-                        id="descripcion" 
-                        name="descripcion" 
-                        rows="5" 
-                        required><?php echo htmlspecialchars($pregunta['descripcion'] ?? '', ENT_QUOTES, 'UTF-8'); ?></textarea>
+                    <textarea class="form-control" id="descripcion" name="descripcion" rows="5" required><?php echo htmlspecialchars($descripcion, ENT_QUOTES, 'UTF-8'); ?></textarea>
+                    <?php if (!empty($error_message_descripcion)): ?>
+                        <div class="alert alert-danger mt-1"><?php echo htmlspecialchars($error_message_descripcion); ?></div>
+                    <?php endif; ?>
                 </div>
                 <button type="submit" class="btn btn-primary w-100">Actualizar</button>
             </form>

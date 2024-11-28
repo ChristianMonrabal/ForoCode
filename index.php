@@ -5,28 +5,23 @@ include_once "./db/conexion.php";
 $isLoggedIn = isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true;
 $username = $isLoggedIn ? htmlspecialchars($_SESSION['username']) : null;
 
-// Definir la consulta base para las preguntas
 $query = "SELECT p.id, p.titulo, p.descripcion, p.fecha_publicacion, u.username 
           FROM preguntas p
           JOIN usuarios u ON p.usuario_id = u.id";
 
-// Si se realiza una búsqueda
 $searchTerm = isset($_GET['search']) ? trim($_GET['search']) : '';
 
 if ($searchTerm) {
     if (strpos($searchTerm, 'user:') === 0) {
-        // Buscar usuarios
-        $searchTerm = substr($searchTerm, 5); // Eliminar 'user:' del término de búsqueda
+        $searchTerm = substr($searchTerm, 5); 
         
-        // Buscar usuarios que coincidan con el nombre
         $query = "SELECT id, username 
                   FROM usuarios 
                   WHERE username LIKE ?";
         $stmt = $pdo->prepare($query);
         $stmt->execute(['%' . $searchTerm . '%']);
-        $users = $stmt->fetchAll(PDO::FETCH_ASSOC); // Usuarios encontrados
+        $users = $stmt->fetchAll(PDO::FETCH_ASSOC); 
         
-        // Si se encontraron usuarios, buscamos las preguntas de esos usuarios
         if ($users) {
             $userIds = array_map(function($user) {
                 return $user['id'];
@@ -39,29 +34,26 @@ if ($searchTerm) {
                       WHERE p.usuario_id IN ($userIdsPlaceholder)";
             $stmt = $pdo->prepare($query);
             $stmt->execute($userIds);
-            $questions = $stmt->fetchAll(PDO::FETCH_ASSOC); // Preguntas encontradas de esos usuarios
+            $questions = $stmt->fetchAll(PDO::FETCH_ASSOC);
         } else {
-            $questions = []; // Si no hay usuarios, no hay preguntas que mostrar
+            $questions = []; 
         }
     } elseif (strpos($searchTerm, 'question:') === 0) {
-        // Buscar preguntas
-        $searchTerm = substr($searchTerm, 9); // Eliminar 'question:' del término de búsqueda
+        $searchTerm = substr($searchTerm, 9); 
         $query = "SELECT p.id, p.titulo, p.descripcion, p.fecha_publicacion, u.username 
                   FROM preguntas p
                   JOIN usuarios u ON p.usuario_id = u.id
                   WHERE p.titulo LIKE ? OR p.descripcion LIKE ?";
         $stmt = $pdo->prepare($query);
         $stmt->execute(['%' . $searchTerm . '%', '%' . $searchTerm . '%']);
-        $questions = $stmt->fetchAll(PDO::FETCH_ASSOC); // Preguntas encontradas
+        $questions = $stmt->fetchAll(PDO::FETCH_ASSOC); 
     } else {
-        // Si no hay un filtro específico, buscamos tanto por usuarios como preguntas
         $query .= " WHERE p.titulo LIKE ? OR p.descripcion LIKE ?";
         $stmt = $pdo->prepare($query);
         $stmt->execute(['%' . $searchTerm . '%', '%' . $searchTerm . '%']);
-        $questions = $stmt->fetchAll(PDO::FETCH_ASSOC); // Preguntas encontradas
+        $questions = $stmt->fetchAll(PDO::FETCH_ASSOC); 
     }
 } else {
-    // Si no hay búsqueda, mostramos las preguntas recientes
     $query .= " ORDER BY p.fecha_publicacion DESC LIMIT 10";
     $stmt = $pdo->prepare($query);
     $stmt->execute();
