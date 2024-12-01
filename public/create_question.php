@@ -93,22 +93,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </div>
     </nav>
-    <form class="question-form" action="" method="POST">
-        <h1 class="form-title">Publicar una nueva pregunta</h1>
-        <?php if (isset($errores['general'])): ?>
-            <div class="alert alert-danger"><?php echo $errores['general']; ?></div>
-        <?php endif; ?>
-        <input class="form-input" type="text" name="titulo" placeholder="Título de la pregunta" value="<?php echo isset($titulo) ? htmlspecialchars($titulo) : ''; ?>">
-        <?php if (isset($errores['titulo'])): ?>
-            <div class="alert alert-danger"><?php echo $errores['titulo']; ?></div>
-        <?php endif; ?>
-        <textarea class="form-textarea" name="descripcion" placeholder="Descripción de la pregunta"><?php echo isset($descripcion) ? htmlspecialchars($descripcion) : ''; ?></textarea>
-        <?php if (isset($errores['descripcion'])): ?>
-            <div class="alert alert-danger"><?php echo $errores['descripcion']; ?></div>
-        <?php endif; ?>
-        <button class="form-submit" type="submit">Publicar</button>
-    </form>
+    <form class="question-form" id="questionForm" action="" method="POST" novalidate>
+    <h1 class="form-title">Publicar una nueva pregunta</h1>
+
+    <div class="form-group">
+        <input id="titulo" class="form-control <?php echo isset($errores['titulo']) ? 'is-invalid' : ''; ?>" type="text" name="titulo" placeholder="Título de la pregunta" value="<?php echo isset($titulo) ? htmlspecialchars($titulo) : ''; ?>">
+        <div  id="errorTitulo">
+            <?php echo isset($errores['titulo']) ? htmlspecialchars($errores['titulo']) : ''; ?>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <textarea id="descripcion" class="form-textarea form-control <?php echo isset($errores['descripcion']) ? 'is-invalid' : ''; ?>" name="descripcion" placeholder="Descripción de la pregunta"><?php echo isset($descripcion) ? htmlspecialchars($descripcion) : ''; ?></textarea>
+        <div  id="errorDescripcion">
+            <?php echo isset($errores['descripcion']) ? htmlspecialchars($errores['descripcion']) : ''; ?>
+        </div>
+    </div>
+
+    <?php if (isset($errores['general'])): ?>
+        <div class="alert alert-danger"><?php echo htmlspecialchars($errores['general']); ?></div>
+    <?php endif; ?>
+
+    <button class="form-submit" type="submit">Publicar</button>
+</form>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/form.js"></script>
 </body>
 </html> 

@@ -45,8 +45,12 @@ $error_message = isset($_SESSION['error_message']) ? $_SESSION['error_message'] 
 unset($_SESSION['error_message']);
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (empty($_POST['contenido'])) {
+    $contenido = trim($_POST['contenido']);
+
+    if (empty($contenido)) {
         $error_message = "El contenido de la respuesta no puede estar vacío.";
+    } elseif (strlen($contenido) > 500) {
+        $error_message = "La respuesta no puede exceder los 500 caracteres.";
     } else {
         $pregunta_id = $_POST['pregunta_id'];
         $contenido = $_POST['contenido'];
@@ -110,14 +114,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
 
         <h2>Responder</h2>
-        <form action="../private/submit_answer.php" method="POST">
+        <form id="respuestaForm" action="../private/submit_answer.php" method="POST">
             <input type="hidden" name="pregunta_id" value="<?php echo htmlspecialchars($pregunta['id']); ?>">
             <div class="mb-3">
-                <textarea class="form-control" name="contenido" placeholder="Escribe tu respuesta aquí..." maxlength="500"></textarea>
+                <textarea class="form-control" name="contenido" id="contenido" placeholder="Escribe tu respuesta aquí..."></textarea>
+                <div id="errorContenido" class="invalid-feedback"></div>
             </div>
             <button type="submit" class="btn btn-primary">Responder</button>
         </form>
-
+                        
         <?php if (!empty($error_message)): ?>
             <div class="alert alert-danger mt-3"><?php echo htmlspecialchars($error_message); ?></div>
         <?php endif; ?>
@@ -137,5 +142,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php endif; ?>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/form.js"></script>
 </body>
 </html>

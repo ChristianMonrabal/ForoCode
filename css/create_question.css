@@ -87,7 +87,7 @@ form.d-flex {
     margin-bottom: 20px;
 }
 
-.form-input, .form-textarea {
+.form-control, .form-textarea {
     width: 100%;
     padding: 10px;
     margin: 10px 0;

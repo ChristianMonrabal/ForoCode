@@ -104,26 +104,34 @@ try {
     <div class="container mt-4">
         <div class="form-container">
             <h1 class="text-center mb-4">Editar Pregunta</h1>
-            <form action="./edit_question.php?id=<?php echo $pregunta_id; ?>" method="POST">
-                <input type="hidden" name="id" value="<?php echo $pregunta['id']; ?>">
-                <div class="mb-3">
-                    <label for="titulo" class="form-label">Título</label>
-                    <input type="text" class="form-control" id="titulo" name="titulo" value="<?php echo htmlspecialchars($titulo, ENT_QUOTES, 'UTF-8'); ?>">
-                    <?php if (!empty($error_message_titulo)): ?>
-                        <div class="alert alert-danger mt-1"><?php echo htmlspecialchars($error_message_titulo); ?></div>
-                    <?php endif; ?>
-                </div>
-                <div class="mb-3">
-                    <label for="descripcion" class="form-label">Descripción</label>
-                    <textarea class="form-control" id="descripcion" name="descripcion" rows="5" required><?php echo htmlspecialchars($descripcion, ENT_QUOTES, 'UTF-8'); ?></textarea>
-                    <?php if (!empty($error_message_descripcion)): ?>
-                        <div class="alert alert-danger mt-1"><?php echo htmlspecialchars($error_message_descripcion); ?></div>
-                    <?php endif; ?>
-                </div>
-                <button type="submit" class="btn btn-primary w-100">Actualizar</button>
-            </form>
+            <form id="questionForm" action="./edit_question.php?id=<?php echo $pregunta_id; ?>" method="POST">
+    <input type="hidden" name="id" value="<?php echo $pregunta['id']; ?>">
+    <div class="mb-3">
+        <label for="titulo" class="form-label">Título</label>
+        <input type="text" class="form-control" id="titulo" name="titulo" value="<?php echo htmlspecialchars($titulo, ENT_QUOTES, 'UTF-8'); ?>">
+
+        <div id="errorTitulo" style="margin-top: 5px;"></div> 
+        <?php if (!empty($error_message_titulo)): ?>
+            <div class="alert alert-danger mt-1"><?php echo htmlspecialchars($error_message_titulo); ?></div>
+        <?php endif; ?>
+
+    </div>
+    <div class="mb-3">
+        <label for="descripcion" class="form-label">Descripción</label>
+        <textarea class="form-control" id="descripcion" name="descripcion" rows="5"><?php echo htmlspecialchars($descripcion, ENT_QUOTES, 'UTF-8'); ?></textarea>
+
+        <div id="errorDescripcion" style="margin-top: 5px;"></div> 
+        <?php if (!empty($error_message_descripcion)): ?>
+            <div class="alert alert-danger mt-1"><?php echo htmlspecialchars($error_message_descripcion); ?></div>
+        <?php endif; ?>
+        
+    </div>
+    <button type="submit" class="btn btn-primary w-100">Actualizar</button>
+    </form>
+
         </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/form.js"></script>
 </body>
 </html>
